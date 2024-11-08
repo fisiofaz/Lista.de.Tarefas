@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:3000/tasks";
+
 document.getElementById("btnAddTarefa").addEventListener("click", function() {
     let nomeTarefa = document.getElementById("inputNovaTarefa").value;
     let custoTarefa = document.getElementById("inputCusto").value;
@@ -92,7 +94,6 @@ function atualizarTarefa(id) {
     document.getElementById("janelaEdicaoFundo").classList.remove("abrir");
 }
 
-
 function tarefaJaExiste(nome) {
     let tarefas = document.querySelectorAll("#listaTarefas li");
     for (let tarefa of tarefas) {
@@ -146,3 +147,107 @@ Sortable.create(taskList, {
         console.log('Item arrastado de', event.oldIndex, 'para', event.newIndex);
     }
 });
+
+async function fetchTasks() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        // Verifique se a resposta tem uma propriedade chamada 'tasks'
+        const tasks = Array.isArray(data) ? data : data.tasks;
+
+        // Atualize a lista de tarefas no frontend
+        renderTasks(tasks);
+    } catch (error) {
+        console.error("Erro ao buscar as tarefas:", error);
+    }
+}
+
+async function addTask(taskTitle) {
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ title: taskTitle }),
+        });
+        const newTask = await response.json();
+        // Adicione a nova tarefa à lista no frontend
+        renderTask(newTask);
+    } catch (error) {
+        console.error("Erro ao adicionar a tarefa:", error);
+    }
+}
+
+async function updateTask(taskId, updatedData) {
+    try {
+        const response = await fetch(`${API_URL}/${taskId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+        });
+        const updatedTask = await response.json();
+        // Atualize a tarefa no frontend
+        renderUpdatedTask(updatedTask);
+    } catch (error) {
+        console.error("Erro ao atualizar a tarefa:", error);
+    }
+}
+
+async function deleteTask(taskId) {
+    try {
+        await fetch(`${API_URL}/${taskId}`, {
+            method: "DELETE",
+        });
+        // Remova a tarefa da lista no frontend
+        removeTaskFromUI(taskId);
+    } catch (error) {
+        console.error("Erro ao excluir a tarefa:", error);
+    }
+}
+// Função para buscar as tarefas
+function fetchTasks() {
+    fetch('http://localhost:3000/tarefas') // Ajuste o caminho conforme necessário
+        .then(response => response.json())
+        .then(data => {
+            // Verifique o que está sendo retornado pela API
+            console.log(data);
+            if (Array.isArray(data)) {
+                renderTasks(data);  // Renderiza se for um array
+            } else {
+                console.error("A resposta da API não é um array válido.");
+            }
+        })
+        .catch(error => console.error("Erro ao buscar tarefas:", error));
+}
+
+// Função para renderizar as tarefas
+function renderTasks(tasks) {
+    const taskList = document.getElementById("taskList");
+    taskList.innerHTML = ""; // Limpa a lista antes de adicionar novas tarefas
+
+    tasks.forEach(task => {
+        // Garantir que as propriedades existam antes de renderizar
+        const title = task.title || "Sem título"; // Usar "Sem título" se não houver título
+        const custo = task.custo || "Sem custo"; // Usar "Sem custo" se não houver custo
+        const dataLimite = task.dataLimite || "Sem data"; // Usar "Sem data" se não houver dataLimite
+
+        const taskItem = document.createElement("div");
+        taskItem.classList.add("task-item");
+
+        taskItem.innerHTML = `
+            <div class="task-text">
+                <span>${title}</span>
+                <span>${custo}</span>
+                <span>${dataLimite}</span>
+            </div>
+        `;
+        taskList.appendChild(taskItem);
+    });
+}
+
+// Chame a função para buscar as tarefas ao carregar a página
+fetchTasks();
