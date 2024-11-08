@@ -5,40 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarefas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="./css/estilos.css">
 </head>
-<body>    
-    <div class="conteudo">
-        <h1>Lista de Tarefas</h1>        
-        <div class="topo">
-            <input type="text" 
-                id="inputNovaTarefa"
-                placeholder="Adicione uma nova tarefa"
-                >
-            <button id="btnAddTarefa">
-                <i class="fa fa-plus"></i>
-            </button>
-        </div>
-        <ul id="listaTarefas">
-        </ul>
-    </div> 
-    <div id="janelaEdicao">
-        <button id="janelaEdicaoBtnFechar">
-            <i class="fa fa-remove fa-2x"></i>
-        </button>
-        <h2 id="idTarefaEdicao">#1021</h2>
-        <hr>
-        <form>
-            <div class="frm-linha">
-                <label for="nome">Nome</label>
-                <input type="text" id="inputTarefaNomeEdicao">
+<body> 
+    <main>
+        <h1>Lista de Tarefas</h1>
+        <section>
+            <div class="conteudo">            
+                <div class="topo">
+                    <input type="text" id="inputNovaTarefa" placeholder="Adicione uma nova tarefa" >
+                    <input type="number" id="inputCusto" placeholder="Custo (R$)">
+                    <input type="date" id="inputDataLimite" placeholder="date">
+                    <button id="btnAddTarefa" title="Adicionar tarefa">
+                        <p>Adicionar nova Tarefa</p>
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <ul id="listaTarefas">
+                </ul>
+            </div> 
+        </section>
+        <section>
+            <div id="janelaEdicao">
+                <button id="janelaEdicaoBtnFechar" title="Botão de Adição">
+                    <i class="fa fa-remove fa-2x"></i>
+                </button>
+                <h2 id="idTarefaEdicao">#1021</h2>
+                <hr>
+                <form>
+                    <div class="frm-linha">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="inputTarefaNomeEdicao" title="inputTarefaNomeEdicao">
+                    </div>
+                    <div class="frm-linha">
+                        <label for="custo">Custo (R$)</label>
+                        <input type="number" id="inputTarefaCustoEdicao" title="Custo (R$)">
+                    </div>
+                    <div class="frm-linha">
+                        <label for="data">Data Limite</label>
+                        <input type="date" id="inputTarefaDataEdicao"  title="Data Limite">
+                    </div>
+                    <div class="frm-linha">
+                        <button id="btnAtualizarTarefa">Salvar</button>
+                    </div>
+                </form>
             </div>
-            <div class="frm-linha">
-                <button id="btnAtualizarTarefa">Salvar</button>
-            </div>
-        </form>
-    </div>
-    <div id="janelaEdicaoFundo"></div>    
-    <script src="js/tarefas.js"></script>
+        </section>  
+        <section>
+             <div id="janelaEdicaoFundo"></div> 
+        </section>  
+    </main>  
+    
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="./js/tarefas.js"></script>
 </body>
 </html>

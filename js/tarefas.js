@@ -1,153 +1,148 @@
-let inputNovaTarefa = document.querySelector('#inputNovaTarefa');
-let btnAddTarefa = document.querySelector('#btnAddTarefa');
-let listaTarefas = document.querySelector('#listaTarefas');
-let janelaEdicao = document.querySelector('#janelaEdicao');
-let janelaEdicaoFundo = document.querySelector('#janelaEdicaoFundo');
-let janelaEdicaoBtnFechar = document.querySelector('#janelaEdicaoBtnFechar');
-let btnAtualizarTarefa = document.querySelector('#btnAtualizarTarefa');
-let idTarefaEdicao = document.querySelector('#idTarefaEdicao');
-let inputTarefaNomeEdicao = document.querySelector('#inputTarefaNomeEdicao');
-const qtdIdsDisponiveis = Number.MAX_VALUE;
+document.getElementById("btnAddTarefa").addEventListener("click", function() {
+    let nomeTarefa = document.getElementById("inputNovaTarefa").value;
+    let custoTarefa = document.getElementById("inputCusto").value;
+    let dataLimite = document.getElementById("inputDataLimite").value;
 
-inputNovaTarefa.addEventListener('keypress', (e) => {
+    if (nomeTarefa && custoTarefa && dataLimite) {
+        // Gerar ID e Ordem automaticamente
+        let idTarefa = Date.now(); // Exemplo: timestamp como ID único
+        let ordemTarefa = document.querySelectorAll("#listaTarefas li").length + 1;
 
-    if(e.keyCode == 13) {
-        let tarefa = {
-            nome: inputNovaTarefa.value,
-            id: gerarIdV2(),
-        }
-        adicionarTarefa(tarefa);
-    }
-});
+        // Formatar a data no formato dia/mês/ano
+        let data = new Date(dataLimite);
+        let dataFormatada = data.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
 
-janelaEdicaoBtnFechar.addEventListener('click', (e) => {
-    alternarJanelaEdicao();
-});
+        // Adicionar nova tarefa na lista
+        let lista = document.getElementById("listaTarefas");
+        let tarefaItem = document.createElement("li");
+        tarefaItem.setAttribute("data-id", idTarefa);
+        tarefaItem.innerHTML = `
+            <div class="tarefa" style="background-color: ${custoTarefa >= 1000 ? 'yellow' : 'transparent'}">
+                <div class="tarefa-text">
+                    <span>${nomeTarefa}</span>
+                    <span>R$ ${parseFloat(custoTarefa).toFixed(2)}</span>
+                    <span>${dataFormatada}</span>
+                    <span class="ordem">${ordemTarefa}</span>
+                </div>
+                <div class="tarefa-btn">  
+                    <button class="editar" onclick="editarTarefa(${idTarefa})"><i class="fa fa-edit"></i></button>
+                    <button class="excluir" onclick="excluirTarefa(${idTarefa})"><i class="fa fa-trash"></i></button>
+                </div>
+             </div>
+        `;
+        lista.appendChild(tarefaItem);
 
-btnAddTarefa.addEventListener('click', (e) => {
-
-    let tarefa = {
-        nome: inputNovaTarefa.value,
-        id: gerarIdV2(),
-    }
-    adicionarTarefa(tarefa);
-});
-
-btnAtualizarTarefa.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    let idTarefa = idTarefaEdicao.innerHTML.replace('#', '');
-
-    let tarefa = {
-        nome: inputTarefaNomeEdicao.value,
-        id: idTarefa
-    }
-
-    let tarefaAtual = document.getElementById(''+idTarefa+'');
-
-    if(tarefaAtual) {
-        let li = criarTagLI(tarefa);
-        listaTarefas.replaceChild(li, tarefaAtual);
-        alternarJanelaEdicao();
+        // Limpar campos
+        document.getElementById("inputNovaTarefa").value = '';
+        document.getElementById("inputCusto").value = '';
+        document.getElementById("inputDataLimite").value = '';
     } else {
-        alert('Elemento HTML não encontrado!');
-    } 
+        alert("Por favor, preencha todos os campos.");
+    }
 });
 
-function gerarId() {
-    return Math.floor(Math.random() * qtdIdsDisponiveis);
+function editarTarefa(id) {
+    // Buscar tarefa pelo ID
+    let tarefa = document.querySelector(`li[data-id='${id}']`);
+    let nome = tarefa.querySelector("span").innerText;
+    let custo = tarefa.querySelectorAll("span")[1].innerText.replace("R$ ", "").replace(",", ".");
+    let dataLimite = tarefa.querySelectorAll("span")[2].innerText;
+
+    // Abrir a janela de edição
+    document.getElementById("janelaEdicao").classList.add("abrir");
+    document.getElementById("janelaEdicaoFundo").classList.add("abrir");
+
+    // Exibir dados atuais da tarefa nos campos de edição
+    document.getElementById("inputTarefaNomeEdicao").value = nome;
+    document.getElementById("inputTarefaCustoEdicao").value = parseFloat(custo).toFixed(2);
+    document.getElementById("inputTarefaDataEdicao").value = dataLimite.split('/').reverse().join('-'); // Formato ISO para input
+
+    // Atualizar o evento de salvar a tarefa editada
+    document.getElementById("btnAtualizarTarefa").onclick = function() {
+        atualizarTarefa(id);
+    };
 }
 
-function gerarIdV2() {
-    return gerarIdUnico();
-}
+function atualizarTarefa(id) {
+    // Obter novos valores dos campos de edição
+    let novoNome = document.getElementById("inputTarefaNomeEdicao").value;
+    let novoCusto = document.getElementById("inputTarefaCustoEdicao").value;
+    let novaData = document.getElementById("inputTarefaDataEdicao").value;
 
-function gerarIdUnico() {
-
-    // debugger;
-    let itensDaLista = document.querySelector('#listaTarefas').children;
-    let idsGerados = [];
-
-    for(let i=0;i<itensDaLista.length;i++) {
-        idsGerados.push(itensDaLista[i].id);
-    }
-
-    let contadorIds = 0;
-    let id = gerarId();
-
-    while(contadorIds <= qtdIdsDisponiveis && 
-        idsGerados.indexOf(id.toString()) > -1) {
-            id = gerarId();
-            contadorIds++;
-
-            if(contadorIds >= qtdIdsDisponiveis) {
-                alert("Oops, ficamos sem IDS :/");
-                throw new Error("Acabou os IDs :/");
-            }
-        }
-
-    return id;
-}
-
-function adicionarTarefa(tarefa) {
-    let li = criarTagLI(tarefa);
-    listaTarefas.appendChild(li);  
-    inputNovaTarefa.value = '';  
-}
-
-function criarTagLI(tarefa) {
-
-    let li = document.createElement('li');
-    li.id = tarefa.id;
-
-    let span = document.createElement('span');
-    span.classList.add('textoTarefa');
-    span.innerHTML = tarefa.nome;
-
-    let div  = document.createElement('div');
-
-    let btnEditar = document.createElement('button');
-    btnEditar.classList.add('btnAcao');
-    btnEditar.innerHTML = '<i class="fa fa-pencil"></i>';
-    btnEditar.setAttribute('onclick', 'editar('+tarefa.id+')');
+    // Encontrar a tarefa na lista e atualizar os valores
+    let tarefa = document.querySelector(`li[data-id='${id}']`);
+    let tarefaTexto = tarefa.querySelector(".tarefa-text");
+    tarefaTexto.children[0].innerText = novoNome;
+    tarefaTexto.children[1].innerText = `R$ ${parseFloat(novoCusto).toFixed(2)}`;
     
-    let btnExcluir  = document.createElement('button');
-    btnExcluir.classList.add('btnAcao');
-    btnExcluir.innerHTML = '<i class="fa fa-trash"></i>';
-    btnExcluir.setAttribute('onclick', 'excluir('+tarefa.id+')');
+    // Atualizar a data para o formato pt-BR
+    let dataFormatada = new Date(novaData).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    tarefaTexto.children[2].innerText = dataFormatada;
 
-    div.appendChild(btnEditar);
-    div.appendChild(btnExcluir);
-
-    li.appendChild(span);
-    li.appendChild(div);
-    return li;
+    // Fechar a janela de edição
+    document.getElementById("janelaEdicao").classList.remove("abrir");
+    document.getElementById("janelaEdicaoFundo").classList.remove("abrir");
 }
 
-function editar(idTarefa) {
-    let li = document.getElementById(''+ idTarefa + '');
-    if(li) {
-        idTarefaEdicao.innerHTML = '#' + idTarefa;
-        inputTarefaNomeEdicao.value = li.innerText;
-        alternarJanelaEdicao();
-    } else {
-        alert('Elemento HTML não encontrado!');
-    }
-}
 
-function excluir(idTarefa) {
-    let confirmacao = window.confirm('Tem certeza que deseja excluir? ');
-    if(confirmacao) {
-        let li = document.getElementById(''+ idTarefa + '');
-        if(li) {
-            listaTarefas.removeChild(li);
-        } else {
-            alert('Elemento HTML não encontrado!');
+function tarefaJaExiste(nome) {
+    let tarefas = document.querySelectorAll("#listaTarefas li");
+    for (let tarefa of tarefas) {
+        if (tarefa.querySelector("span").innerText === nome) {
+            return true;
         }
     }
+    return false;
 }
 
-function alternarJanelaEdicao() {
-    janelaEdicao.classList.toggle('abrir');
-    janelaEdicaoFundo.classList.toggle('abrir');
+function excluirTarefa(id) {
+    if (confirm("Tem certeza que deseja excluir esta tarefa?")) {
+        let tarefa = document.querySelector(`li[data-id='${id}']`);
+        tarefa.remove();
+    }
 }
+
+function adicionarBotoesDeReordenacao(tarefaItem) {
+    let subirBtn = document.createElement("button");
+    subirBtn.classList.add("subir");
+    subirBtn.innerHTML = "▲";
+    subirBtn.onclick = function() {
+        let tarefaAnterior = tarefaItem.previousElementSibling;
+        if (tarefaAnterior) {
+            tarefaItem.parentNode.insertBefore(tarefaItem, tarefaAnterior);
+        }
+    };
+
+    let descerBtn = document.createElement("button");
+    descerBtn.classList.add("descer");
+    descerBtn.innerHTML = "▼";
+    descerBtn.onclick = function() {
+        let tarefaProxima = tarefaItem.nextElementSibling;
+        if (tarefaProxima) {
+            tarefaItem.parentNode.insertBefore(tarefaProxima, tarefaItem);
+        }
+    };
+
+    tarefaItem.appendChild(subirBtn);
+    tarefaItem.appendChild(descerBtn);
+}
+
+const taskList = document.getElementById('listaTarefas'); // Atualize para 'listaTarefas'
+
+// Inicialize o SortableJS
+Sortable.create(taskList, {
+    animation: 150,
+    onEnd: function(event) {
+        // Função chamada ao soltar o item
+        // Você pode atualizar a ordem das tarefas no backend aqui
+        console.log('Item arrastado de', event.oldIndex, 'para', event.newIndex);
+    }
+});
