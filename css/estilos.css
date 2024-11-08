@@ -1,177 +1,323 @@
-body {
-    background: #f00b0bc7;
-    color: #FFF;
+/* Reset básico para garantir consistência */
+* {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
-}
-
-.conteudo {
-    margin: 0 auto;
-    width: 100%;;
-    max-width: 450px;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    background: #745050;
-    padding: 55px;
-    border-radius: 12px;
-}
-
-.topo {
-   display: flex;
-   justify-content: space-between;
-   margin-bottom: 35px;     
-}
-
-.topo input {
-    width: 350px;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #191818;
-    outline: none;
-    font-size: 1.2rem;
-    background: #f5efef;
-    color: #941026;
-}
-
-.topo button {
-    width: 45px;
-    border-radius: 12px;
-    border: 1px solid #191818;
-    background: #191818;
-    color: #FFF;
-    outline: none;
-}
-
-.topo button:hover {
-    background: #1f1e1e;
-    cursor: pointer;
-}
-
-#listaTarefas {
-    list-style-type: none;
     padding: 0;
-    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f3a683, #f7b731, #f4e1d2); /* Degradê suave */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Container principal */
+main {
+    width: 100%;
+    max-width: 900px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    overflow: hidden;
+    animation: slideIn 0.8s ease-in-out;
+}
+
+/* Animação para entrada do container */
+@keyframes slideIn {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Estilo do título */
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Seção do formulário de adicionar tarefa */
+.topo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#inputNovaTarefa, #inputCusto, #inputDataLimite {
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 32%;
+    background-color: #f7f7f7;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#inputNovaTarefa:focus, #inputCusto:focus, #inputDataLimite:focus {
+    border-color: #f7b731;
+    box-shadow: 0 0 8px rgba(247, 183, 49, 0.6);
+    outline: none;
+}
+
+button {
+    background-color: #f7b731;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+
+button:hover {
+    background-color: #f5a623;
+    transform: translateY(-3px);
+}
+
+button p {
+    margin-right: 20px;
+    font-weight: 600;
+}
+
+button i {
+    font-size: 1.6rem;
+}
+
+/* Estilo da lista de tarefas */
+#listaTarefas {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
 }
 
 #listaTarefas li {
-    padding: 20px;
-    background: #191818;
-    border-radius: 12px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 12px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btnAcao {
-    border-radius: 20px;
-    border: 1px solid #191818;
-    width: 38px;
-    height: 38px;
-    margin-right: 8px;
-    cursor: pointer;
-    background: #2b2a2a;
-    color: #FFF;
-    outline: none;
+#listaTarefas li:hover {
+    background-color: #f1f1f1;
+    transform: translateY(-5px);
 }
 
-.btnAcao:hover {
-    background: #3c3a3a;
+.tarefa {
+    display: grid;
+    grid-template-columns: 2fr 1fr;    
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.tarefa-text {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tarefa-text span {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.tarefa-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .textoTarefa {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 290px;
-    white-space: nowrap;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 500;
+    flex: 1;
 }
 
+
+#listaTarefas .btnAcao {
+    margin-left: 10px;
+}
+
+#listaTarefas .btnAcao i {
+    font-size: 1.4rem;
+    color: #f7b731;
+    transition: color 0.3s ease;
+}
+
+#listaTarefas .btnAcao:hover i {
+    color: #f5a623;
+}
+
+/* Estilo para o modal de edição */
 #janelaEdicao {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 20px;
-    background: #191818;
-    border: 1px solid #2f2e2e;
-    width: 415px;
+    background-color: #fff;
+    padding: 25px;
     border-radius: 12px;
-    z-index: 200;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: none;
+    width: 90%;
+    max-width: 450px;
+    z-index: 1000;
 }
 
 #janelaEdicao.abrir {
-    display: block !important;
-}
-
-#janelaEdicaoFundo {
-    position: fixed;
-    top: 0;
-    background-color: #000;
-    bottom: 0;
-    left: 0;
-    opacity: 0.9;
-    z-index: 100;
-    right: 0;
-    display: none;
-}
-
-#janelaEdicaoFundo.abrir {
-   display: block !important;    
+    display: block;
 }
 
 #janelaEdicaoBtnFechar {
-    position: absolute;
-    top: -25px;
-    right: -18px; 
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 1px solid #2d2c2c;
-    background: #2d2c2c;
-    color: #FFF;
-    outline: none;
-}
-
-form {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.frm-linha {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
-.frm-linha label {
-    margin-bottom: 7px;
-}
-
-.frm-linha input {
-    padding: 15px;
-    border-radius: 12px;
-    outline: none;
-    border: 1px solid #191818;
-    font-size: 1.2rem;
-    background: #2d2c2c;
-    color: #FFF;
-}
-
-.frm-linha button {
-    background: #2d2c2c;
-    border: 1px solid #191818;
-    padding: 7px;
-    margin-bottom: 10px;
-    border-radius: 12px;
-    color: #CCC;
+    background-color: transparent;
+    border: none;
+    color: #f7b731;
+    font-size: 2rem;
     cursor: pointer;
-    height: 50px;
-    font-size: 1.3rem;
+}
+
+#janelaEdicao h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+#janelaEdicao form .frm-linha {
+    margin-bottom: 18px;
+}
+
+#janelaEdicao input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    background-color: #f7f7f7;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#janelaEdicao input:focus {
+    border-color: #f7b731;
+    box-shadow: 0 0 8px rgba(247, 183, 49, 0.6);
     outline: none;
 }
 
-.frm-linha button:hover {
-    background: #3c3a3a;
-} 
+#btnAtualizarTarefa {
+    background-color: #f7b731;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    
+}
+
+#btnAtualizarTarefa:hover {
+    background-color: #f5a623;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Estilo do fundo do modal */
+#janelaEdicaoFundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+
+#janelaEdicaoFundo.abrir {
+    display: block;
+}
+
+.editar, .excluir {   
+    background-color: #f7b731;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .topo {
+        flex-direction: column;
+    }
+
+    #inputNovaTarefa, #inputCusto, #inputDataLimite {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    #janelaEdicao {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    #inputNovaTarefa, #inputCusto, #inputDataLimite {
+        font-size: 1rem;
+    }
+
+    #listaTarefas li {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #listaTarefas .btnAcao {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
