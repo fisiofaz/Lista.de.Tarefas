@@ -21,7 +21,15 @@
 
 ## Sobre
 
-O objetivo deste desafio é criar uma Lista de Tarefas
+O objetivo deste desafio é criar uma Lista de Tarefas com os campos: 
+Campos:
+•	Identificador da tarefa (chave primária)
+•	Nome da tarefa
+•	Custo (R$)
+•	Data limite
+•	Ordem de apresentação (campo numérico, não repetido, que servirá para ordenar os registros na tela)
+
+A onde poderia Editar, Excluir e Reordenar as tarefas
 
 
 ### Links
@@ -47,5 +55,4 @@ O objetivo deste desafio é criar uma Lista de Tarefas
 ## Desenvolvedora
 
 - Github - [Fábio André Zatta](https://github.com/fisiofaz)
-- LinkedIn - [Nathannie Gomes](https://www.linkedin.com/in/fabiozatta-dweb/)
-- Frontend Mentor - [@nathannieg](https://www.frontendmentor.io/profile/fisiofaz)
+- LinkedIn - [Fábio André Zatta](https://www.linkedin.com/in/fabiozatta-dweb/)
