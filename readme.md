@@ -3,7 +3,11 @@
 
 
 <p align="center">
-  <img src="https://i.imgur.com/wzwwUrA.png"/>
+  <img src="https://github.com/fisiofaz/Lista.de.Tarefas/blob/main/image/imagem%20do%20projeto.png"/>
+</p>
+
+<p align="center">
+  <img src="https://github.com/fisiofaz/Lista.de.Tarefas/blob/main/image/imagem%20do%20projeto 2.png"/>
 </p>
 
 ## Índice
